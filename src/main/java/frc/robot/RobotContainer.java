@@ -6,7 +6,7 @@ import frc.robot.subsystems.shooter;
 import frc.robot.subsystems.intake;
 
 public class RobotContainer {
-    private final GamepadJoystick joystick = new GamepadJoystick(Constants.OperatorConstants.kDriverControllerPort);
+    private final GamepadJoystick joystick = new GamepadJoystick(Constants.driverControllerPort);
 
     private final shooter shooterSubsystem = new shooter();
     private final intake intakeSubsystem = new intake();

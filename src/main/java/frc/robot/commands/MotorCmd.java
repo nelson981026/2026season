@@ -43,33 +43,35 @@ public class MotorCmd extends Command {
 	@Override
 	public void execute() {
 		// FOR TESTING
-		double rollerVoltage = (this.controller.getAButton()) ? Constants.SHOOTER_VOLTAGE : this.controller.getLeftY();
-		double intakeVoltage = (this.controller.getBButton()) ? Constants.INTAKE_VOLTAGE : this.controller.getRightY();
+		double shooterVoltage = (this.controller.getAButton()) ? Constants.shooter.VOLTAGE : this.controller.getLeftY();
+		double intakeVoltage = (this.controller.getBButton()) ? Constants.intake.VOLTAGE : this.controller.getRightY();
+
 		switch (controller.getPOV()) {
-			case 0 -> shooterAngle = 29.0;
-			case 270 -> shooterAngle = 14.0;
-			case 90 -> shooterAngle = 14.0;
-			case 180 -> shooterAngle = 0.5;
-		}
-		if(this.controller.getXButton()){
-			intakeLength = 0.3;
-		} else if(this.controller.getYButton()){
-			intakeLength = 0.0;
+			case Constants.POV.up -> shooterAngle = Constants.shooter.MAX_ANGLE;
+			case Constants.POV.right -> shooterAngle = Constants.shooter.MID_ANGLE;
+			case Constants.POV.left -> shooterAngle = Constants.shooter.MID_ANGLE;
+			case Constants.POV.down -> shooterAngle = Constants.shooter.MIN_ANGLE;
 		}
 		if (this.controller.getLeftBumperButtonPressed()) {
-			shooterAngle -= 1.5;
+			shooterAngle -= Constants.shooter.DELTA;
 		} else if (getLeftTriggerButtonPressed()) {
-			shooterAngle += 1.5;
+			shooterAngle += Constants.shooter.DELTA;
+		}
+		leftTriggerAxis = this.controller.getLeftTriggerAxis();
+
+		if(this.controller.getXButton()){
+			intakeLength = Constants.intake.MAX_LENGTH;
+		} else if(this.controller.getYButton()){
+			intakeLength = Constants.intake.MIN_LENGTH;
 		}
 		if (this.controller.getRightBumperButtonPressed()) {
-			intakeLength -= 0.06;
+			intakeLength -= Constants.intake.DELTA;
 		} else if (getRightTriggerButtonPressed()) {
 			intakeLength += 0.06;
 		}
-		leftTriggerAxis = this.controller.getLeftTriggerAxis();
 		rightTriggerAxis = this.controller.getRightTriggerAxis();
 
-		this.shooterSubsystem.move(rollerVoltage, shooterAngle);
+		this.shooterSubsystem.move(shooterVoltage, shooterAngle);
 		this.intakeSubsystem.move(intakeVoltage, intakeLength);
 	}
 

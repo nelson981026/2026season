@@ -59,7 +59,7 @@ public class shooter extends SubsystemBase {
 
     public void move(double rollerVoltage, double lifterAngle) {
         this.flyWheelMain.setVoltage(rollerVoltage);
-        if(this.flyWheelMain.get()>(Constants.SHOOTER_VOLTAGE/12.0)*0.8){
+        if(this.flyWheelMain.get()>(Constants.shooter.VOLTAGE/12.0)*0.8){
             this.feeder.setVoltage(rollerVoltage);
         }
         this.lifter.setControl(new MotionMagicVoltage(Units.degreesToRotations(lifterAngle)));

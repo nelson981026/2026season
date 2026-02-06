@@ -50,13 +50,13 @@ public class intake extends SubsystemBase {
         this.center.getConfigurator().apply(rollerConfig);
     }
 
-    public void move(double rollerVoltage, double lifterLength) {
+    public void move(Double rollerVoltage, double lifterLength) {
         this.lifter.setControl(new MotionMagicVoltage(lifterLength));
         this.intake.setVoltage(rollerVoltage);
         this.hopper.setVoltage(rollerVoltage);
         this.center.setVoltage(rollerVoltage);
-        SmartDashboard.putNumber("intakeLength", lifterLength);
         SmartDashboard.putNumber("intakeVoltage", rollerVoltage);
+        SmartDashboard.putNumber("intakeLength", lifterLength);
     }
 
     public void stop() {
