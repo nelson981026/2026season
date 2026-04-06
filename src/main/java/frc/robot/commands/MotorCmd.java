@@ -42,9 +42,10 @@ public class MotorCmd extends Command {
 
 	@Override
 	public void execute() {
-		// FOR TESTING
 		double shooterVoltage = (this.controller.getAButton()) ? Constants.shooter.VOLTAGE : this.controller.getLeftY();
 		double intakeVoltage = (this.controller.getBButton()) ? Constants.intake.VOLTAGE : this.controller.getRightY();
+		// double shooterVoltage = this.controller.getLeftY();
+		// double intakeVoltage = this.controller.getRightY();
 
 		switch (controller.getPOV()) {
 			case Constants.POV.up -> shooterAngle = Constants.shooter.MAX_ANGLE;
@@ -67,12 +68,20 @@ public class MotorCmd extends Command {
 		if (this.controller.getRightBumperButtonPressed()) {
 			intakeLength -= Constants.intake.DELTA;
 		} else if (getRightTriggerButtonPressed()) {
-			intakeLength += 0.06;
+			intakeLength += Constants.intake.DELTA;
 		}
 		rightTriggerAxis = this.controller.getRightTriggerAxis();
 
 		this.shooterSubsystem.move(shooterVoltage, shooterAngle);
 		this.intakeSubsystem.move(intakeVoltage, intakeLength);
+		/*
+		 * intake:
+		 *  B botton or Right Y
+		 *  X++/Y-- botton or Right Trigger+/Bumper-
+		 * shooter:
+		 *  A botton or Left Y
+		 *  POV or Left Trigger+/Bumper-
+		*/
 	}
 
 	@Override

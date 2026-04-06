@@ -15,14 +15,14 @@ import frc.robot.Constants;
 import frc.robot.DeviceId;
 
 public class shooter extends SubsystemBase {
-    private final TalonFX lifter;
+    private final TalonFX hood;
     private final TalonFX flyWheelMain;
     private final TalonFX flyWheelFollower;
     private final Follower followerCtrl = new Follower(DeviceId.shooter.FLYWHEEL_MAIN, MotorAlignmentValue.Opposed);
     private final TalonFX feeder;
 
     public shooter() {
-        this.lifter = new TalonFX(DeviceId.shooter.LIFTER);
+        this.hood = new TalonFX(DeviceId.shooter.HOOD);
         this.flyWheelMain = new TalonFX(DeviceId.shooter.FLYWHEEL_MAIN);
         this.flyWheelFollower = new TalonFX(DeviceId.shooter.FLYWHEEL_FOLLOWER);
         this.feeder = new TalonFX(DeviceId.shooter.FEEDER);
@@ -53,22 +53,23 @@ public class shooter extends SubsystemBase {
         this.feeder.getConfigurator().apply(rollerConfig);
         this.flyWheelMain.getConfigurator().apply(rollerConfig);
         this.flyWheelFollower.setControl(this.followerCtrl);
-        this.lifter.getConfigurator().apply(lifterConfig);
-        this.lifter.setPosition(0.0);
+        this.hood.getConfigurator().apply(lifterConfig);
+        this.hood.setPosition(0.0);
     }
 
     public void move(double rollerVoltage, double lifterAngle) {
         this.flyWheelMain.setVoltage(rollerVoltage);
-        if(this.flyWheelMain.get()>(Constants.shooter.VOLTAGE/12.0)*0.8){
+        if (this.flyWheelMain.get() > (Constants.shooter.VOLTAGE / 12.0) * 0.8) {
             this.feeder.setVoltage(rollerVoltage);
         }
-        this.lifter.setControl(new MotionMagicVoltage(Units.degreesToRotations(lifterAngle)));
+        this.hood.setControl(
+                new MotionMagicVoltage(Units.degreesToRotations(Constants.shooter.angleCheck(lifterAngle))));
         SmartDashboard.putNumber("shooterVoltage", rollerVoltage);
         SmartDashboard.putNumber("shooterAngle", lifterAngle);
     }
 
     public void stop() {
-        this.lifter.stopMotor();
+        this.hood.stopMotor();
         this.flyWheelMain.stopMotor();
         this.flyWheelFollower.stopMotor();
         this.feeder.stopMotor();
